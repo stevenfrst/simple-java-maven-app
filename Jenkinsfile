@@ -1,26 +1,25 @@
 pipeline {
-  agent any
-  stages {
-    stage('Build') {
-      steps {
-        sh 'mvn clean package'
-      }
+    agent any
+    tools {
+        maven 'maven'
+        jdk 'jdk'
     }
-    stage('Test') {
-      post {
-        always {
-          junit 'target/surefire-reports/*.xml'
-
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+                sh 'file 33'
+            }
         }
-
-      }
-      steps {
-        sh 'mvn test'
-      }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
     }
-  }
-  tools {
-    maven 'maven'
-    jdk 'jdk'
-  }
 }
